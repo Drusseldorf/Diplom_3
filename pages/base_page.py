@@ -1,3 +1,4 @@
+from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
@@ -30,6 +31,24 @@ class BasePage:
     def switch_tab(self):
         self.driver.switch_to.window(self.driver.window_handles[1])
 
-    def is_present(self, locator):
-        element = wait(self.driver, timeout=3).until(EC.visibility_of_element_located(locator))
-        return element.is_displayed()
+    def is_visible(self, locator):
+
+        result = True
+
+        try:
+            wait(self.driver, timeout=3).until(EC.visibility_of_element_located(locator))
+        except TimeoutException:
+            result = False
+
+        return result
+
+    def is_present_in_dom(self, locator):
+
+        result = True
+
+        try:
+            wait(self.driver, timeout=3).until(EC.presence_of_element_located(locator))
+        except TimeoutException:
+            result = False
+
+        return result
