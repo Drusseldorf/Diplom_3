@@ -1,17 +1,18 @@
 import pytest
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service
 
 from helpers.generate import Generate
+from helpers.webdriver_factory import WebDriverFactory
 from http_requests.user import User
+from http_requests.models.user_model import RegisterUser
 from data import URL
 
 
 @pytest.fixture(scope='function')
-def driver():
+def driver(request):
 
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    browser_name = request.config.getoption('--browser')
+    driver_factory = WebDriverFactory()
+    driver = driver_factory.get_web_driver(browser_name)
     driver.set_window_size(1920, 1080)
 
     yield driver
@@ -20,13 +21,13 @@ def driver():
 
 
 @pytest.fixture(scope='function')
-def authorized_account_user(driver):
+def authorized_account_user(driver) -> RegisterUser:
+
+    driver.get(URL.MAIN_PAGE_URL)
 
     response = User.register(**Generate.full_creds())
     access_token = response.accessToken
     refresh_token = response.refreshToken
-
-    driver.get(URL.MAIN_PAGE_URL)
 
     driver.execute_script(f"localStorage.setItem('accessToken', '{access_token}')")
     driver.execute_script(f"localStorage.setItem('refreshToken', '{refresh_token}')")
@@ -35,3 +36,7 @@ def authorized_account_user(driver):
 
     if access_token:
         User.delete(access_token)
+
+
+def pytest_addoption(parser):
+    parser.addoption("--browser", action="store", default="chrome", help="Browser name: chrome or firefox")

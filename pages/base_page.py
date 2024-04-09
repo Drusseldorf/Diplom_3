@@ -1,5 +1,5 @@
+import allure
 from selenium.common import TimeoutException
-from selenium.webdriver import Keys
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -20,16 +20,6 @@ class BasePage:
 
     def input_text(self, locator, text):
         self.driver.find_element(*locator).send_keys(text)
-
-    def press_enter(self, locator):
-        self.driver.find_element(*locator).send_keys(Keys.ENTER)
-
-    def is_page_opened(self, url):
-        wait(self.driver, 10).until(EC.url_to_be(url))
-        return url == self.driver.current_url
-
-    def switch_tab(self):
-        self.driver.switch_to.window(self.driver.window_handles[1])
 
     def is_visible(self, locator):
 
@@ -52,3 +42,13 @@ class BasePage:
             result = False
 
         return result
+
+    def get_list_of_elements(self, locator):
+
+        return wait(self.driver, timeout=3).until(EC.presence_of_all_elements_located(locator))
+
+    def drag_and_drop(self, js_scripts, locator, target_locator):
+
+        element = wait(self.driver, timeout=3).until(EC.presence_of_all_elements_located(locator))[0]
+        target_element = self.driver.find_element(*target_locator)
+        self.driver.execute_script(js_scripts, element, target_element)

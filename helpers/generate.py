@@ -27,11 +27,3 @@ class Generate:
     def password(cls):
         cls.last_generated_password = Faker().password()
         return cls.last_generated_password
-
-    @classmethod
-    def get_last_generated_password(cls):
-        return cls.last_generated_password
-
-    @classmethod
-    def get_last_generated_email(cls):
-        return cls.last_generated_email

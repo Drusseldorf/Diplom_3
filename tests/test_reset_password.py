@@ -1,3 +1,5 @@
+import allure
+
 from pages.log_in_page import LogInPage
 from pages.forgot_password_page import ForgotPasswordPage
 from pages.reset_password_page import ResetPasswordPage
@@ -6,6 +8,7 @@ from data import URL
 
 class TestForgotPasswordPage:
 
+    @allure.title('Открытие страницы восстановления пароля')
     def test_open_forgot_password_page(self, driver):
 
         log_in_page = LogInPage(driver)
@@ -16,6 +19,7 @@ class TestForgotPasswordPage:
 
         assert forgot_password_page.reset_button_is_present()
 
+    @allure.title('Заполнение поля email')
     def test_fill_email_click_reset(self, driver):
 
         forgot_password_page = ForgotPasswordPage(driver)
@@ -27,6 +31,7 @@ class TestForgotPasswordPage:
 
         assert reset_password_page.input_code_field_is_present()
 
+    @allure.title('Поле пароля становится активным при нажатии Показать пароль')
     def test_password_visibility_button(self, driver):
 
         forgot_password_page = ForgotPasswordPage(driver)
