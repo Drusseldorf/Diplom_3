@@ -1,7 +1,5 @@
 import allure
 from selenium.common import TimeoutException
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 from locators.order_feed_page_locators import OrderFeedListLocators
 from pages.base_page import BasePage
@@ -75,9 +73,7 @@ class OrdersFeedPage(BasePage):
         result = True
 
         try:
-            WebDriverWait(self.driver, 20).until(
-                EC.text_to_be_present_in_element(OrderFeedListLocators.ORDERS_IN_PROGRESS, str(order_number))
-            )
+            self.wait_text_in_element(str(order_number), OrderFeedListLocators.ORDERS_IN_PROGRESS)
         except TimeoutException:
 
             result = False
