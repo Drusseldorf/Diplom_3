@@ -7,6 +7,10 @@ from http_requests.models.user_model import RegisterUser
 from data import URL
 
 
+def pytest_addoption(parser):
+    parser.addoption("--browser", action="store", default="chrome", help="Browser name: chrome or firefox")
+
+
 @pytest.fixture(scope='function')
 def driver(request):
 
@@ -36,7 +40,3 @@ def authorized_account_user(driver) -> RegisterUser:
 
     if access_token:
         User.delete(access_token)
-
-
-def pytest_addoption(parser):
-    parser.addoption("--browser", action="store", default="chrome", help="Browser name: chrome or firefox")

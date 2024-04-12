@@ -5,6 +5,7 @@ class Generate:
 
     last_generated_password = None
     last_generated_email = None
+    last_generated_name = None
 
     @classmethod
     def full_creds(cls):
@@ -14,9 +15,10 @@ class Generate:
             'name': cls.name()
         }
 
-    @staticmethod
-    def name():
-        return Faker().name()
+    @classmethod
+    def name(cls):
+        cls.last_generated_name = Faker().name()
+        return cls.last_generated_name
 
     @classmethod
     def email(cls):

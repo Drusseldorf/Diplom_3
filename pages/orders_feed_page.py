@@ -49,9 +49,7 @@ class OrdersFeedPage(BasePage):
         result = True
 
         try:
-            WebDriverWait(self.driver, 10).until(
-                EC.text_to_be_present_in_element(OrderFeedListLocators.OVERALL_ORDERS_NUMBER, str(before_order + 1))
-            )
+            self.wait_text_in_element(str(before_order+1), OrderFeedListLocators.OVERALL_ORDERS_NUMBER)
         except TimeoutException:
 
             result = False
@@ -64,9 +62,7 @@ class OrdersFeedPage(BasePage):
         result = True
 
         try:
-            WebDriverWait(self.driver, 20).until(
-                EC.text_to_be_present_in_element(OrderFeedListLocators.TODAYS_ORDERS_NUMBER, str(before_order + 1))
-            )
+            self.wait_text_in_element(str(before_order+1), OrderFeedListLocators.TODAYS_ORDERS_NUMBER)
         except TimeoutException:
 
             result = False
